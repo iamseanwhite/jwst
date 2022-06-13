@@ -1,0 +1,11 @@
+{
+    "name": "jwst-event-driven-operations",
+    "description": "",
+    "version": "1.0.0",
+    "dependencies": {
+        "node-gyp": "^9.0.0"        
+    },
+    "scripts": {
+        "build-sp": "node-gyp clean configure build"
+    }       
+}
