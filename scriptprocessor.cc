@@ -9,7 +9,7 @@ void GetTelemetry(const FunctionCallbackInfo<Value>& args) {
   args.GetReturnValue().Set(String::NewFromUtf8(isolate, "Returning telemetry...").ToLocalChecked());
 }
 
-//Retrieve system time as time since epoh in UTC
+//Retrieve system time as seconds since epoch in UTC
 void GetTime(const FunctionCallbackInfo<Value>& args) {
   auto now = std::chrono::system_clock::now();
   std::time_t currentTime = std::chrono::system_clock::to_time_t(now);

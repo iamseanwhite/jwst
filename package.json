@@ -3,9 +3,10 @@
     "description": "",
     "version": "1.0.0",
     "dependencies": {
-        "node-gyp": "^9.0.0"        
+        "moment": "^2.29.3",
+        "node-gyp": "^9.0.0"
     },
     "scripts": {
         "build-sp": "node-gyp clean configure build"
-    }       
+    }
 }
