@@ -1,6 +1,6 @@
 //#!/usr/bin/env node
 const sp = require('../build/Release/scriptprocessor');
-const moment = require('moment');
+const util = require('./util');
 
 var currentVisit;
 var observationPlan = [
@@ -10,9 +10,9 @@ var observationPlan = [
 
 var nextVisit = observationPlan[0];
 
-var systemTime = sp.getTime() * 1000;
-var beginTime = Date.parse(moment(nextVisit.begin, "YYYY-DDD/hh:mm:ss").format());
-var endTime = Date.parse(moment(nextVisit.end, "YYYY-DDD/hh:mm:ss").format());
+var systemTime = sp.getTime();
+var beginTime = util.parseJulianTimeStamp(nextVisit.begin);
+var endTime = util.parseJulianTimeStamp(nextVisit.end);
 
 if (beginTime <= systemTime && systemTime < endTime) {
    console.log("Currently within visit window");
