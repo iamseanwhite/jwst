@@ -1,8 +1,8 @@
 {
     "targets": [
         {
-            "target_name": "scriptprocessor",
-            "sources": ["scriptprocessor.cc"]
+            "target_name": "flightsoftware",
+            "sources": ["flightsoftware.cc"]
         }
     ]
 }

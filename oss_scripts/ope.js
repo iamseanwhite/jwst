@@ -1,6 +1,11 @@
 //#!/usr/bin/env node
-const sp = require('../build/Release/scriptprocessor');
+const { workerData, parentPort } = require('worker_threads');
+const sp = require('../scriptprocessor');
 const util = require('./util');
+
+console.log("Inside OPE");
+console.log(workerData);
+parentPort.postMessage('Posting Message: Hello world!');
 
 var currentVisit;
 var observationPlan = [
@@ -11,10 +16,23 @@ var observationPlan = [
 var nextVisit = observationPlan[0];
 
 var systemTime = sp.getTime();
+console.log(systemTime);
 var beginTime = util.parseJulianTimeStamp(nextVisit.begin);
 var endTime = util.parseJulianTimeStamp(nextVisit.end);
 
 if (beginTime <= systemTime && systemTime < endTime) {
    console.log("Currently within visit window");
+
+   //open file
+
+   //read file
+
+   //process script
+
+   //issue event message
+
+   //wait
+
+   //get shared parameter
 }
 else console.log("Not currently within visit window");

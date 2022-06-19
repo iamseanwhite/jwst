@@ -7,6 +7,6 @@
         "node-gyp": "^9.0.0"
     },
     "scripts": {
-        "build-sp": "node-gyp clean configure build"
+        "build-fs": "node-gyp clean configure build"
     }
 }
