@@ -3,36 +3,39 @@ const { workerData, parentPort } = require('worker_threads');
 const sp = require('../scriptprocessor');
 const util = require('./util');
 
-console.log("Inside OPE");
-console.log(workerData);
-parentPort.postMessage('Posting Message: Hello world!');
+//parentPort.postMessage('');
 
 var currentVisit;
 var observationPlan = [
-    {visit: "V001", begin: '2022-167/02:01:00', end: '2022-167/02:01:10', cutoff: '2022-168/03:30:44'},
-    {visit: "V002", begin: '2022-167/23:53:44', end: '2022-168/02:55:44', cutoff: '2022-168/23:53:44'}
+    {name: "V001", begin: '2022-174/00:01:00', end: '2022-174/02:38:10', cutoff: '2022-174/03:30:44'},
+    {name: "V002", begin: '2022-167/23:53:44', end: '2022-168/02:55:44', cutoff: '2022-168/23:53:44'}
 ];
 
 var nextVisit = observationPlan[0];
 
 var systemTime = sp.getTime();
-console.log(systemTime);
 var beginTime = util.parseJulianTimeStamp(nextVisit.begin);
 var endTime = util.parseJulianTimeStamp(nextVisit.end);
 
 if (beginTime <= systemTime && systemTime < endTime) {
    console.log("Currently within visit window");
 
-   //open file
+currentVisit = nextVisit;
 
-   //read file
+//open file
+var fileDescriptor = sp.openFile(currentVisit.name); 
 
-   //process script
+//read file
+var fileData = sp.readFile(currentVisit.name);
+console.log(fileData);
+sp.closeFile(fileDescriptor);
 
-   //issue event message
+//process script
 
-   //wait
+//issue event message
 
-   //get shared parameter
+//wait
+
+//get shared parameter
 }
 else console.log("Not currently within visit window");
