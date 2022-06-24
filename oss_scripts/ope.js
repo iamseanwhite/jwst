@@ -7,7 +7,7 @@ const util = require('./util');
 
 var currentVisit;
 var observationPlan = [
-    {name: "V001", begin: '2022-174/00:01:00', end: '2022-174/02:38:10', cutoff: '2022-174/03:30:44'},
+    {name: "V001", begin: '2022-174/00:01:00', end: '2022-175/02:38:10', cutoff: '2022-174/03:30:44'},
     {name: "V002", begin: '2022-167/23:53:44', end: '2022-168/02:55:44', cutoff: '2022-168/23:53:44'}
 ];
 
@@ -18,24 +18,28 @@ var beginTime = util.parseJulianTimeStamp(nextVisit.begin);
 var endTime = util.parseJulianTimeStamp(nextVisit.end);
 
 if (beginTime <= systemTime && systemTime < endTime) {
-   console.log("Currently within visit window");
+    
+    console.log("Currently within visit window");
 
-currentVisit = nextVisit;
+    currentVisit = nextVisit;
 
-//open file
-var fileDescriptor = sp.openFile(currentVisit.name); 
+    //open file
+    var fileDescriptor = sp.openFile(currentVisit.name); 
 
-//read file
-var fileData = sp.readFile(currentVisit.name);
-console.log(fileData);
-sp.closeFile(fileDescriptor);
+    //read file
+    var fileData = sp.readFile(currentVisit.name);
+    console.log(fileData);
+    sp.closeFile(fileDescriptor);
 
-//process script
+    //process script
+    sp.processScript("./oss_scripts/ad.js", "activityInfo");
 
-//issue event message
+    //issue event message
+    var message = `${currentVisit.name} started at ${new Date(sp.getTime())}`;
+    sp.issueEventMessage(message);
 
-//wait
-
-//get shared parameter
+    //wait
+    
+    //get shared parameter
 }
 else console.log("Not currently within visit window");
