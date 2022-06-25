@@ -1,13 +1,11 @@
 //#!/usr/bin/env node
 const { workerData, parentPort } = require('worker_threads');
-const sp = require('../scriptprocessor');
+const sp = require('../script_processor/sp_extensions');
 const util = require('./util');
-
-//parentPort.postMessage('');
 
 var currentVisit;
 var observationPlan = [
-    {name: "V001", begin: '2022-174/00:01:00', end: '2022-175/02:38:10', cutoff: '2022-174/03:30:44'},
+    {name: "V001", begin: '2022-174/00:01:00', end: '2022-176/03:38:10', cutoff: '2022-174/03:30:44'},
     {name: "V002", begin: '2022-167/23:53:44', end: '2022-168/02:55:44', cutoff: '2022-168/23:53:44'}
 ];
 
@@ -32,7 +30,7 @@ if (beginTime <= systemTime && systemTime < endTime) {
     sp.closeFile(fileDescriptor);
 
     //process script
-    sp.processScript("./oss_scripts/ad.js", "activityInfo");
+    sp.processScript("ad.js", "activityInfo");
 
     //issue event message
     var message = `${currentVisit.name} started at ${new Date(sp.getTime())}`;
