@@ -2,10 +2,10 @@ const { Worker, isMainThread } = require('worker_threads');
 const fileSystem = require('fs'); 
 const flightSoftware = require('../build/Release/flightsoftware');
    
-var commandParameterDictionary = {"key1": "value1", "key2": "value2"};
+var commandParameterDictionary = {"param_1": 0, "param_2": 0};
+var telemetryItems = [];
 
-if (isMainThread) {      
-                              
+if (isMainThread) { 
     const worker = new Worker('../oss_scripts/ope.js', { workerData: 'yo' });
 
     worker.on('message', console.log);
@@ -17,3 +17,4 @@ else {}
 module.exports.flightSoftware = flightSoftware;
 module.exports.fileSystem = fileSystem;
 module.exports.commandParameterDictionary = commandParameterDictionary;
+module.exports.telemetryItems = telemetryItems;
