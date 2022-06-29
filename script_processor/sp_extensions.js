@@ -29,11 +29,17 @@ var closeFile = function (fd) {
 
 // Activate specified script in a separate execution thread
 var processScript = function (fileName, activityInfo) {
-    const worker = new Worker(`../oss_scripts/${fileName}`, { workerData: activityInfo });
+    return new Promise((resolve, reject) => {
+        const worker = new Worker(`../oss_scripts/${fileName}`, { 
+            workerData: activityInfo 
+        });
 
-    worker.on('message', console.log);
-    worker.on('error', console.error);
-    worker.on('exit', code => console.log(`${fileName} completed with code: `, code));  
+        worker.on('message', resolve);
+        worker.on('error', reject);
+        worker.on('exit', code => {
+            console.log(`${fileName} completed with code: `, code);
+        });
+    }); 
 }
 
 // Construct one textual event message telemetry packet
@@ -70,7 +76,6 @@ var getTelemetry = function(numberOfItems) {
 
 // Expose the extension methods to the OSS Scripts
 module.exports.getTime = getTime;
-module.exports.getTelemetry = getTelemetry;
 module.exports.openFile = openFile;
 module.exports.readFile = readFile;
 module.exports.closeFile = closeFile;

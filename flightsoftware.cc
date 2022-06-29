@@ -27,6 +27,7 @@ void ExecuteCommand(const FunctionCallbackInfo<Value>& args) {
 // Get Telemetry
 void GetTelemetry(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();
+  // TODO: pass param and target value, return status
   //std::string message = "param_1: " + std::to_string(param_1);
   args.GetReturnValue().Set(param_1);
 }

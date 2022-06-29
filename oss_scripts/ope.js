@@ -5,7 +5,7 @@ const util = require('./util');
 
 var currentVisit;
 var observationPlan = [
-    {name: "V001", begin: '2022-174/00:01:00', end: '2022-178/03:38:10', cutoff: '2022-174/03:30:44'},
+    {name: "V001", begin: '2022-174/00:01:00', end: '2022-188/03:38:10', cutoff: '2022-174/03:30:44'},
     {name: "V002", begin: '2022-167/23:53:44', end: '2022-168/02:55:44', cutoff: '2022-168/23:53:44'}
 ];
 
@@ -29,11 +29,16 @@ if (beginTime <= systemTime && systemTime < endTime) {
     var fileData = sp.readFile(currentVisit.name);
     sp.closeFile(fileDescriptor);
 
+    //issue event message
+    var message = `Activity Descripton script activated at ${new Date(sp.getTime())}`;
+    sp.issueEventMessage(message);
+
     //process script
-    sp.processScript("ad.js", "activityInfo");
-    
-    //wait
-    
-    //get shared parameter
+    var promise = sp.processScript("ad.js", "activityInfo");
+
+    //wait, get shared parameter
+    Promise.all([promise]).then(results => {
+        console.log(`${results[0]}`);
+    })    
 }
 else console.log("Not currently within visit window");
