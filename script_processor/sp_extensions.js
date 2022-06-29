@@ -28,9 +28,9 @@ var closeFile = function (fd) {
 }
 
 // Activate specified script in a separate execution thread
-var processScript = function (fileName, activityInfo) {
+var processScript = function (fileName, activityInfo) {    
     return new Promise((resolve, reject) => {
-        const worker = new Worker(`../oss_scripts/${fileName}`, { 
+        const worker = new Worker(`../oss_scripts/activity_description/${fileName}`, { 
             workerData: activityInfo 
         });
 

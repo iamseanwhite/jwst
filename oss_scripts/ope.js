@@ -27,18 +27,29 @@ if (beginTime <= systemTime && systemTime < endTime) {
 
     //read file
     var fileData = sp.readFile(currentVisit.name);
+
+    //close file
     sp.closeFile(fileDescriptor);
 
-    //issue event message
-    var message = `Activity Descripton script activated at ${new Date(sp.getTime())}`;
-    sp.issueEventMessage(message);
-
-    //process script
-    var promise = sp.processScript("ad.js", "activityInfo");
-
+    //TODO: parse this data out of the visit file
+    var activities = [
+        {script: "activity_description_1.js", parameters:[{key: "param_1", value: 1}]},
+        {script: "activity_description_2.js", parameters:[{key: "param_2", value: 2}]}
+    ];
+       
+    //process sequences of an activity group in parallel 
+    var promises = [];
+    for (var i = 0; i < activities.length; i++) {
+        //issue event message
+        var message = `${activities[i].script} activated at ${util.formatDate(sp.getTime())}`;
+        sp.issueEventMessage(message);
+         //process scripts
+        promises[i] = sp.processScript(activities[i].script, activities[i].parameters);
+    }
+        
     //wait, get shared parameter
-    Promise.all([promise]).then(results => {
-        console.log(`${results[0]}`);
-    })    
+    Promise.all(promises).then(results => {
+        results.forEach(result => console.log(`${result}`));
+    });    
 }
 else console.log("Not currently within visit window");
