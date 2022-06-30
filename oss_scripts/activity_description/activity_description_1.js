@@ -11,9 +11,11 @@ sp.sendCommand("param_1");
 
 var telemetryCheck = setInterval(function() {
     if(param1 != 1) {
-        param1 = sp.getTelemetry(1);
-        parentPort.postMessage(`param1: ${param1}`);
+        param1 = sp.getTelemetry(1);        
     }
-    else 
+    else {
+        parentPort.postMessage(`Script_1: Successfully updated parameter`);
         clearInterval(telemetryCheck);
+    }
+        
 }, 1000);
