@@ -1,3 +1,4 @@
+var path = require('path');
 const { Worker, workerData, parentPort } = require('worker_threads');
 const sp = require('../../script_processor/sp_extensions');
 
@@ -14,7 +15,7 @@ var telemetryCheck = setInterval(function() {
         param1 = sp.getTelemetry(1);        
     }
     else {
-        parentPort.postMessage(`Script_1: Successfully updated parameter`);
+        parentPort.postMessage(`${path.basename(__filename)}: Telemetry OK`);
         clearInterval(telemetryCheck);
     }
         

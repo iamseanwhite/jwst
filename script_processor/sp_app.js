@@ -10,7 +10,7 @@ if (isMainThread) {
 
     worker.on('message', console.log);
     worker.on('error', console.error);
-    worker.on('exit', code => console.log('OPE completed with code: ', code));    
+    worker.on('exit', code => console.log('Observation Plan is empty. OPE completed with code: ', code, '\n'));    
 } 
 else {}
  

@@ -33,12 +33,8 @@ var processScript = function (fileName, activityInfo) {
         const worker = new Worker(`../oss_scripts/activity_description/${fileName}`, { 
             workerData: activityInfo 
         });
-
         worker.on('message', resolve);
         worker.on('error', reject);
-        worker.on('exit', code => {
-            console.log(`${fileName} completed with code: `, code);
-        });
     }); 
 }
 
