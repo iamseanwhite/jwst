@@ -1,0 +1,1 @@
+cmd_Release/obj.target/flightsoftware.node := g++ -o Release/obj.target/flightsoftware.node -shared -pthread -rdynamic -m64  -Wl,-soname=flightsoftware.node -Wl,--start-group Release/obj.target/flightsoftware/flightsoftware.o -Wl,--end-group 

@@ -1,0 +1,1 @@
+cmd_Release/flightsoftware.node := ln -f "Release/obj.target/flightsoftware.node" "Release/flightsoftware.node" 2>/dev/null || (rm -rf "Release/flightsoftware.node" && cp -af "Release/obj.target/flightsoftware.node" "Release/flightsoftware.node")
