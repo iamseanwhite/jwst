@@ -1,10 +1,17 @@
 #include <node.h>
 #include <chrono>
 #include <iostream>
+#include <thread>
 
 using namespace v8;
 
 int param_1, param_2, param3 = 0;
+
+// Sleep for a random amount of time
+void SimulateExecutionTime() {
+  srand(time(NULL));
+  std::this_thread::sleep_for(std::chrono::milliseconds(rand() % 8500 + 500));
+}
 
 // Retrieve system time as ms since epoch in UTC
 void GetTime(const FunctionCallbackInfo<Value>& args) {
@@ -17,8 +24,8 @@ void GetTime(const FunctionCallbackInfo<Value>& args) {
 // Execute Command
 void ExecuteCommand(const FunctionCallbackInfo<Value>& args) {
   Isolate* isolate = args.GetIsolate();  
-  // TODO: asynchronously simulate the time taken to execute the command
-  //sleep(5);
+  // Simulate the time taken to execute the command
+  SimulateExecutionTime();
   param_1 = args[1].As<Number>()->Value();
   std::string message = "param_1: " + std::to_string(param_1);
   args.GetReturnValue().Set(String::NewFromUtf8(isolate, message.c_str()).ToLocalChecked());

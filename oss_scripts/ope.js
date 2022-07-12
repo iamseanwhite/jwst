@@ -9,7 +9,7 @@ var now = Date.now();
 // Guarantee visits are soon to begin upon running script
 observationPlan.push({name: "V001", begin: util.convertToJulianTimeStamp(now + 5000), end: util.convertToJulianTimeStamp(now + 10000), cutoff: '2022-174/03:30:44'});
 observationPlan.push({name: "V002", begin: util.convertToJulianTimeStamp(now + 15000), end: util.convertToJulianTimeStamp(now + 20000), cutoff: '2022-168/23:53:44'});
-observationPlan.push({name: "V003", begin: util.convertToJulianTimeStamp(now + 10000), end: util.convertToJulianTimeStamp(now + 20000), cutoff: '2022-168/23:53:44'});
+observationPlan.push({name: "V003", begin: util.convertToJulianTimeStamp(now + 10000), end: util.convertToJulianTimeStamp(now + 35000), cutoff: '2022-168/23:53:44'});
 observationPlan.push({name: "V004", begin: util.convertToJulianTimeStamp(now), end: util.convertToJulianTimeStamp(now + 5000), cutoff: '2022-168/23:53:44'});
 
 var processVisit = function () {        
@@ -59,20 +59,23 @@ var processVisit = function () {
             });
 
             // Wait for all activities to complete (script processor's "wait")       
-            (function wait () {
+            (function wait () {                
                 if(isVisitComplete) {
-                    console.log(`    Visit ${currentVisit.name} Complete \n`);        
+                    console.log(`    Visit ${currentVisit.name} Complete`);        
                     // Remove the visit from the observation plan
                     observationPlan.shift();
                     if (observationPlan.length > 0)
                         processVisit();
                     else return;
                 }
-                else setTimeout(wait, 1000);                          
+                else  {
+                    console.log(`Waiting for commands to complete...`);        
+                    setTimeout(wait, 2000);     
+                }                     
             })();                        
         }
         else {
-            console.log(`${nextVisit.name} Visit window has past. Removing from observation plan...\n`);
+            console.log(`\n${nextVisit.name} Visit window has past. Removing from observation plan...\n`);
             observationPlan.shift();
             if (observationPlan.length > 0)
                 processVisit();
@@ -80,7 +83,7 @@ var processVisit = function () {
         }        
     }
     else {
-        console.log(`Waiting for next visit window to begin...`);
+        console.log(`\nWaiting for next visit window to begin...`);
         setTimeout(processVisit, 3000);          
     }     
 }
