@@ -3,7 +3,7 @@
     "description": "",
     "version": "1.0.0",
     "dependencies": {
-        "moment": "^2.29.3",
+        "moment": "^2.29.4",
         "node-gyp": "^9.0.0"
     },
     "scripts": {
