@@ -5,13 +5,13 @@ const sp = require('../../script_processor/sp_extensions');
 sp.setTelemetryParameter("param_2");
 var param2 = sp.getTelemetry(1);
 
-//based on the activity info...
+// TODO: use values passed from visit files
 sp.setCommandParameterValue("param_2", 2);
 
 sp.sendCommand("param_2");
 
 var telemetryCheck = setInterval(function() {
-    if(param2 != 1) {
+    if(param2 != 2) {
         param2 = sp.getTelemetry(1);        
     }
     else {

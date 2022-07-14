@@ -2,10 +2,11 @@
 #include <chrono>
 #include <iostream>
 #include <thread>
+#include <map>
 
 using namespace v8;
 
-int param_1, param_2, param3 = 0;
+std::map<std::string,int> parameterMap = {{"param_1", 0}, {"param_2", 0}, {"param_1", 0}};
 
 // Sleep for a random amount of time
 void SimulateExecutionTime() {
@@ -23,20 +24,23 @@ void GetTime(const FunctionCallbackInfo<Value>& args) {
 
 // Execute Command
 void ExecuteCommand(const FunctionCallbackInfo<Value>& args) {
-  Isolate* isolate = args.GetIsolate();  
   // Simulate the time taken to execute the command
   SimulateExecutionTime();
-  param_1 = args[1].As<Number>()->Value();
-  std::string message = "param_1: " + std::to_string(param_1);
-  args.GetReturnValue().Set(String::NewFromUtf8(isolate, message.c_str()).ToLocalChecked());
+  // Execute the command
+  Isolate* isolate = args.GetIsolate();  
+  String::Utf8Value str(isolate, args[0]);
+  std::string parameterName(*str);
+  parameterMap[parameterName] = args[1].As<Number>()->Value();
 }
 
 // Get Telemetry
 void GetTelemetry(const FunctionCallbackInfo<Value>& args) {
+  // TODO: handle multiple parameters at once
   Isolate* isolate = args.GetIsolate();
-  // TODO: pass param and target value, return status
-  //std::string message = "param_1: " + std::to_string(param_1);
-  args.GetReturnValue().Set(1);
+  String::Utf8Value str(isolate, args[0]);
+  std::string parameterName(*str);
+  auto parameterValue = parameterMap[parameterName];
+  args.GetReturnValue().Set(Number::New(isolate, parameterValue));
 }
 
 NODE_MODULE_INIT() {

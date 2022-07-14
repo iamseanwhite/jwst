@@ -5,7 +5,7 @@ const sp = require('../../script_processor/sp_extensions');
 sp.setTelemetryParameter("param_1");
 var param1 = sp.getTelemetry(1);
 
-//based on the activity info...
+// TODO: use values passed from visit files
 sp.setCommandParameterValue("param_1", 1);
 
 sp.sendCommand("param_1");

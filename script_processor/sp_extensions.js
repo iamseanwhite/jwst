@@ -66,8 +66,9 @@ var setTelemetryParameter = function (telemetryItem) {
 
 // Retrieve up to 10 previously identified telemetry items
 var getTelemetry = function(numberOfItems) {
-    var telem = flightSoftware.getTelemetry(numberOfItems);
-    return telem;
+    var items = telemetryItems.slice(0, numberOfItems);
+    var telemetry = flightSoftware.getTelemetry(items);
+    return telemetry;
 }
 
 // Expose the extension methods to the OSS Scripts

@@ -6,7 +6,7 @@ var commandParameterDictionary = {"param_1": 0, "param_2": 0};
 var telemetryItems = [];
 
 if (isMainThread) { 
-    const worker = new Worker('../oss_scripts/ope.js', { workerData: 'yo' });
+    const worker = new Worker('../oss_scripts/ope.js');
 
     worker.on('message', console.log);
     worker.on('error', console.error);
