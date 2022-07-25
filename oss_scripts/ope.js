@@ -1,5 +1,6 @@
 const sp = require('../script_processor/sp_extensions');
 const util = require('./util');
+const { CommandStatus } = require('../script_processor/sp_app');
 
 var currentVisit, nextVisit = {};
 var observationPlan = [];
@@ -8,8 +9,8 @@ var now = Date.now();
 
 // Guarantee visits are soon to begin upon running script
 observationPlan.push({name: "V001", begin: util.convertToJulianTimeStamp(now + 5000), end: util.convertToJulianTimeStamp(now + 10000), cutoff: '2022-174/03:30:44'});
-observationPlan.push({name: "V002", begin: util.convertToJulianTimeStamp(now + 15000), end: util.convertToJulianTimeStamp(now + 20000), cutoff: '2022-168/23:53:44'});
-observationPlan.push({name: "V003", begin: util.convertToJulianTimeStamp(now + 10000), end: util.convertToJulianTimeStamp(now + 35000), cutoff: '2022-168/23:53:44'});
+observationPlan.push({name: "V002", begin: util.convertToJulianTimeStamp(now + 5000), end: util.convertToJulianTimeStamp(now + 20000), cutoff: '2022-168/23:53:44'});
+observationPlan.push({name: "V003", begin: util.convertToJulianTimeStamp(now + 5000), end: util.convertToJulianTimeStamp(now + 35000), cutoff: '2022-168/23:53:44'});
 observationPlan.push({name: "V004", begin: util.convertToJulianTimeStamp(now), end: util.convertToJulianTimeStamp(now + 5000), cutoff: '2022-168/23:53:44'});
 
 var processVisit = function () {        
@@ -25,7 +26,7 @@ var processVisit = function () {
 
             currentVisit = nextVisit;
             var isVisitComplete = false;   
-
+            var isVisitSuccess = false;
             // Open file
             var fileDescriptor = sp.openFile(currentVisit.name); 
 
@@ -51,17 +52,28 @@ var processVisit = function () {
                 promises.push(sp.processScript(activities[i].script, activities[i].parameters));
             }
                     
-            // return results for all activities (script processor's "getSharedParameter")
+            // Return results for all activities (script processor's "getSharedParameter")
             Promise.all(promises).then(results => {            
                 //console.log("Activity Description scripts results:");
-                results.forEach(result => console.log(`${result}`));        
+                results.forEach(result => 
+                    console.log(`${result[0]}: ${result[1] == CommandStatus.Succeeded 
+                        ? "Command Succeeded" 
+                        : "Command Failed"}`
+                    ));        
                 isVisitComplete = true;
+                if (!results.some(x => x.includes(CommandStatus.Failed))) 
+                    isVisitSuccess = true;
             });
 
             // Wait for all activities to complete (script processor's "wait")       
             (function wait () {                
                 if(isVisitComplete) {
-                    console.log(`    Visit ${currentVisit.name} Complete`);        
+                    if (isVisitSuccess) {
+                        console.log(`    Visit ${currentVisit.name} Completed Successfully`);     
+                    }   
+                    else {
+                        console.log(`    Visit ${currentVisit.name} Failed. Removing from observation plan...\n`);     
+                    }
                     // Remove the visit from the observation plan
                     observationPlan.shift();
                     if (observationPlan.length > 0)
